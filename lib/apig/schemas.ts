@@ -28,6 +28,17 @@ export const postFunderRequestSchema = {
     }
 }
 
+export const postFunderInvestmentRequestSchema = {
+    type: JsonSchemaType.OBJECT,
+    required: ['funderId', 'learnerId', 'amount', 'paybackPlan'],
+    properties: {
+        funderId: {type: JsonSchemaType.STRING},
+        learnerId: {type: JsonSchemaType.STRING},
+        amount: {type: JsonSchemaType.STRING},
+        paybackPlan: {type: JsonSchemaType.STRING}
+    }
+}
+
 export const postPartnerRequestSchema = {
     type: JsonSchemaType.OBJECT,
     required: ['name', 'profile', 'city', 'state'],

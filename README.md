@@ -94,6 +94,26 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 }
 ```
 
+### GET /learner/{id}/investment
+
+#### response example: 
+
+```
+{
+  "investments": [
+    {
+      "investmentId": "1936e62a-7616-4d70-acb8-e827f766899f",
+      "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+      "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+      "amount": "5000",
+      "currencyType": "USD",
+      "status": "PENDING",
+      "paybackPlan": "DONATION"
+    }
+  ]
+}
+```
+
 ### GET /funder
 
 #### response example: 
@@ -170,6 +190,83 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
   "availableSupport": "Mentoring. Financial.",
   "city": "Brentwood",
   "state": "TN",
+}
+```
+
+### GET /funder/{id}/investment
+
+#### request example
+
+```
+{
+  "investments": [
+    {
+      "investmentId": "1936e62a-7616-4d70-acb8-e827f766899f",
+      "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+      "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+      "amount": "5000",
+      "currencyType": "USD",
+      "status": "PENDING",
+      "paybackPlan": "DONATION"
+    }
+  ]
+}
+```
+
+#### response example: 
+
+```
+{
+  "id": "1936e62a-7616-4d70-acb8-e827f766899f",
+  "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+  "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+  "amount": 5000,
+  "currencyType": "USD",
+  "status": "PENDING",
+  "paybackPlan": "DONATION"
+}
+```
+
+### POST /funder/{id}/investment
+
+#### request example
+
+```
+{
+    "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+    "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+    "amount": "5000",
+    "paybackPlan": "DONATION"
+}
+```
+
+#### response example: 
+
+```
+{
+  "id": "1936e62a-7616-4d70-acb8-e827f766899f",
+  "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+  "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+  "amount": 5000,
+  "currencyType": "USD",
+  "status": "PENDING",
+  "paybackPlan": "DONATION"
+}
+```
+
+### GET /funder/{id}/investment/{investmentid}
+
+#### response example: 
+
+```
+{
+  "investmentId": "1936e62a-7616-4d70-acb8-e827f766899f",
+  "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+  "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+  "amount": "5000",
+  "currencyType": "USD",
+  "status": "PENDING",
+  "paybackPlan": "DONATION"
 }
 ```
 

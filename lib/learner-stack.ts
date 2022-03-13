@@ -12,6 +12,10 @@ import { addGetFunderApiIntegration } from './apig/getFunderDynamoDirectProxy';
 import { addGetPartnersApiIntegration } from './apig/getPartnersDynamoDirectProxy';
 import { addGetPartnerApiIntegration } from './apig/getPartnerDynamoDirectProxy';
 import { addPostPartnerApiIntegration } from './apig/postPartnerLambdaProxy';
+import { addGetInvestmentsForFunderApiIntegration } from './apig/getInvestmentsForFunderDynamoDirectProxy';
+import { addGetInvestmentForFunderApiIntegration } from './apig/getInvestmentForFunderDynamoDirectProxy';
+import { addGetInvestmentsForLearnerApiIntegration } from './apig/getInvestmentsForLearnerDynamoDirectProxy';
+import { addPostFunderInvestmentApiIntegration } from './apig/postFunderInvestmentLambdaProxy';
 
 export class LearnerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -54,6 +58,14 @@ export class LearnerStack extends Stack {
     });
 
     table.grantWriteData(postPartnerLambda);
+
+    const postInvestmentForFunderLambda = new lambda.Function(this, 'postInvestmentForFunder', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'postFunderInvestment.handler',
+      code: lambda.Code.fromAsset("resources"),
+    });
+
+    table.grantWriteData(postInvestmentForFunderLambda);
     
     // apig
     const api = new apigateway.RestApi(this, "learners-api", {
@@ -64,17 +76,27 @@ export class LearnerStack extends Stack {
     const v1Resource = api.root.addResource("api").addResource("v1");
     const learnerResource = v1Resource.addResource("learner");
     const learnerByIdResource = learnerResource.addResource("{id}");
+    const learnerInvestmentResource = learnerByIdResource.addResource("investment");
     const funderResource = v1Resource.addResource("funder");
     const funderByIdResource = funderResource.addResource("{id}");
+    const funderInvestmentResource = funderByIdResource.addResource("investment");
+    const funderInvestmentByIdResource = funderInvestmentResource.addResource("{investmentid}");
     const partnerResource = v1Resource.addResource("partner");
     const partnerByIdResource = partnerResource.addResource("{id}");
 
     addGetLearnersApiIntegration(this, api, learnerResource, table);
     addGetLearnerApiIntegration(this, api, learnerByIdResource, table);
     addPostLearnerApiIntegration(this, api, learnerResource, postLearnerLambda, table);
+    addGetInvestmentsForLearnerApiIntegration(this, api, learnerInvestmentResource, table);
+
     addGetFundersApiIntegration(this, api, funderResource, table);
     addGetFunderApiIntegration(this, api, funderByIdResource, table);
     addPostFunderApiIntegration(this, api, funderResource, postFunderLambda, table);
+
+    addGetInvestmentsForFunderApiIntegration(this, api, funderInvestmentResource, table);
+    addGetInvestmentForFunderApiIntegration(this, api, funderInvestmentByIdResource, table);
+    addPostFunderInvestmentApiIntegration(this, api, funderInvestmentResource, postInvestmentForFunderLambda, table)
+
     addGetPartnersApiIntegration(this, api, partnerResource, table);
     addGetPartnerApiIntegration(this, api, partnerByIdResource, table);
     addPostPartnerApiIntegration(this, api, partnerResource, postPartnerLambda, table);
