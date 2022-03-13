@@ -6,6 +6,7 @@ import * as apigateway from "aws-cdk-lib/aws-apigateway";
 import { addGetLearnersApiIntegration } from './apig/getLearnersDynamoDirectProxy';
 import { addGetFundersApiIntegration } from './apig/getFundersDynamoDirectProxy';
 import { addPostLearnerApiIntegration } from './apig/postLearnerLambdaProxy';
+import { addGetLearnerApiIntegration } from './apig/getLearnerDynamoDirectProxy';
 
 export class LearnerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -42,10 +43,12 @@ export class LearnerStack extends Stack {
 
     const v1Resource = api.root.addResource("api").addResource("v1");
     const learnerResource = v1Resource.addResource("learner");
+    const learnerByIdResource = learnerResource.addResource("{id}");
     const funderResource = v1Resource.addResource("funder");
 
     addGetLearnersApiIntegration(this, api, learnerResource, table);
     addPostLearnerApiIntegration(this, api, learnerResource, postLearnerLambda, table);
+    addGetLearnerApiIntegration(this, api, learnerByIdResource, table);
     addGetFundersApiIntegration(this, api, funderResource, table);
 
   }
