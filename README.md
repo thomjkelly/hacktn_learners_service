@@ -46,6 +46,23 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 }
 ```
 
+### GET /learner/{id}
+
+#### response example: 
+
+```
+{
+  "learnerId": "c9bbde54-db14-4d8a-93ed-12d32f15c548",
+  "firstName": "Bob",
+  "lastName": "Davidson",
+  "bio": "I haven't worked in 7 years, and I realize that I need a skill in order to make it in today's economy",
+  "tradeFocus": "Plumber",
+  "investmentNeeds": "$10,000 to cover class fees and meals",
+  "city": "Nashville",
+  "state": "TN"
+}
+```
+
 ### POST /learner
 
 #### request example
