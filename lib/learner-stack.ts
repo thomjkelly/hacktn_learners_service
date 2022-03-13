@@ -7,6 +7,8 @@ import { addGetLearnersApiIntegration } from './apig/getLearnersDynamoDirectProx
 import { addGetFundersApiIntegration } from './apig/getFundersDynamoDirectProxy';
 import { addPostLearnerApiIntegration } from './apig/postLearnerLambdaProxy';
 import { addGetLearnerApiIntegration } from './apig/getLearnerDynamoDirectProxy';
+import { addPostFunderApiIntegration } from './apig/postFunderLambdaProxy';
+import { addGetFunderApiIntegration } from './apig/getFunderDynamoDirectProxy';
 
 export class LearnerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -33,9 +35,16 @@ export class LearnerStack extends Stack {
     });
 
     table.grantWriteData(postLearnerLambda);
+
+    const postFunderLambda = new lambda.Function(this, 'postFunder', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'postFunder.handler',
+      code: lambda.Code.fromAsset("resources"),
+    });
+
+    table.grantWriteData(postFunderLambda);
     
     // apig
-
     const api = new apigateway.RestApi(this, "learners-api", {
       restApiName: "Learners Service",
       description: "API Endpoint for Learners Service"
@@ -45,11 +54,13 @@ export class LearnerStack extends Stack {
     const learnerResource = v1Resource.addResource("learner");
     const learnerByIdResource = learnerResource.addResource("{id}");
     const funderResource = v1Resource.addResource("funder");
+    const funderByIdResource = funderResource.addResource("{id}");
 
     addGetLearnersApiIntegration(this, api, learnerResource, table);
-    addPostLearnerApiIntegration(this, api, learnerResource, postLearnerLambda, table);
     addGetLearnerApiIntegration(this, api, learnerByIdResource, table);
+    addPostLearnerApiIntegration(this, api, learnerResource, postLearnerLambda, table);
     addGetFundersApiIntegration(this, api, funderResource, table);
-
+    addGetFunderApiIntegration(this, api, funderByIdResource, table);
+    addPostFunderApiIntegration(this, api, funderResource, postFunderLambda, table);
   }
 }

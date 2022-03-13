@@ -5,7 +5,7 @@ import { Construct } from "constructs";
 import { errorResponses } from "./common";
 
 
-export const addGetFundersApiIntegration: (
+export const addGetFunderApiIntegration: (
     stack: Construct,
     api: RestApi,
     apiResource: Resource,
@@ -16,7 +16,7 @@ export const addGetFundersApiIntegration: (
     apiResource: Resource,
     table: Table
 ) => {
-    const namePrefix = "getFunders"
+    const namePrefix = "getFunder"
     const getPolicy = new Policy(stack, `${namePrefix}Policy`, {
         statements: [
           new PolicyStatement({
@@ -33,32 +33,32 @@ export const addGetFundersApiIntegration: (
       getRole.attachInlinePolicy(getPolicy);
 
       const requestTemplate = `{
+        #set($id = $util.urlDecode($input.params('id')))
         "TableName": "${table.tableName}",
-        "KeyConditionExpression": "pk = :pk",
-        "ExpressionAttributeValues": {
-          ":pk": {
-            "S": "FUNDER#"
-          }
+        "Key": {
+            "pk": {
+                "S": "FUNDER#"
+            },
+            "sk": {
+                "S": "FUNDER#$id#"
+            }
         }
       }`
   
-      const responseTemplate = `#set($inputRoot = $input.path('$')) {
-        "funders": [
-          #foreach($elem in $inputRoot.Items) {
-          #set($skComponents = $elem.sk.S.split("#"))
-          "funderId": "$skComponents.get(1)",
-          "firstName": "$elem.firstName.S",
-          "lastName": "$elem.lastName.S",
-          "bio": "$elem.bio.S",
-          "investmentInterests": "$elem.investmentInterests.S",
-          "availableSupport": "$elem.availableSupport.S",
-          "city": "$elem.city.S",
-          "state": "$elem.state.S"
-          }#if($foreach.hasNext),#end
-          #end
-        ]
-      }
-      `
+      const responseTemplate = `
+            #set($inputRoot = $input.path('$')) 
+            #set($elem = $inputRoot.Item) 
+            #set($skComponents = $elem.sk.S.split("#"))
+        {
+            "funderId": "$skComponents.get(1)",
+            "firstName": "$elem.firstName.S",
+            "lastName": "$elem.lastName.S",
+            "bio": "$elem.bio.S",
+            "availableSupport": "$elem.availableSupport.S",
+            "investmentInterests": "$elem.investmentInterests.S",
+            "city": "$elem.city.S",
+            "state": "$elem.state.S"
+        }`
   
       const responseModel = api.addModel(
         `${namePrefix}Model`, {
@@ -99,7 +99,7 @@ export const addGetFundersApiIntegration: (
       }
   
       const integration = new AwsIntegration({
-        action: 'Query',
+        action: 'GetItem',
         integrationHttpMethod: "POST",
         options: {
           credentialsRole: getRole,

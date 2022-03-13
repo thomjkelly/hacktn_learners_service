@@ -93,3 +93,82 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
   "state": "TN"
 }
 ```
+
+### GET /funder
+
+#### response example: 
+
+```
+{
+  "funders": [
+    {
+      "funderId": "03b4a168-9ee2-46c5-8158-02d2541d280a",
+      "firstName": "Dave",
+      "lastName": "Gartland",
+      "bio": "I'm an active investor looking for good investments opportunities in my city",
+      "investmentInterests": "Tech. Trades",
+      "availableSupport": "Mentoring. Financial.",
+      "city": "Nashville",
+      "state": "TN"
+    },
+    {
+      "funderId": "69069cfe-ee4d-4d88-9d0f-1ed483d09aa7",
+      "firstName": "Carlos",
+      "lastName": "Forrest",
+      "bio": "I'm a retired software engineer looking to give back to my community",
+      "investmentInterests": "Tech",
+      "availableSupport": "Mentoring. Financial.",
+      "city": "Brentwood",
+      "state": "TN"
+    }
+  ]
+}
+```
+
+### GET /funder/{id}
+
+#### response example: 
+
+```
+{
+  "funderId": "69069cfe-ee4d-4d88-9d0f-1ed483d09aa7",
+  "firstName": "Carlos",
+  "lastName": "Forrest",
+  "bio": "I'm a retired software engineer looking to give back to my community",
+  "availableSupport": "Mentoring. Financial.",
+  "investmentInterests": "Tech",
+  "city": "Brentwood",
+  "state": "TN"
+}
+```
+
+### POST /funder
+
+#### request example
+
+```
+{
+    "firstName": "Carlos",
+    "lastName": "Forrest",
+    "bio": "I'm a retired software engineer looking to give back to my community",
+    "availableSupport": "Mentoring. Financial.",
+    "investmentInterests": "Tech",
+    "city": "Brentwood",
+    "state": "TN"
+}
+```
+
+#### response example: 
+
+```
+{
+  "id": "69069cfe-ee4d-4d88-9d0f-1ed483d09aa7",
+  "firstName": "Carlos",
+  "lastName": "Forrest",
+  "bio": "I'm a retired software engineer looking to give back to my community",
+  "investmentInterests": "Tech",
+  "availableSupport": "Mentoring. Financial.",
+  "city": "Brentwood",
+  "state": "TN",
+}
+```
