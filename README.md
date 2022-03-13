@@ -19,6 +19,7 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 #### response example: 
 
+```
 {
   "learners": [
     {
@@ -43,11 +44,13 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
     }
   ]
 }
+```
 
 ### POST /learner
 
 #### request example
 
+```
 {
     "firstName": "Alice",
     "lastName": "Ordway",
@@ -57,9 +60,11 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
     "city": "Madison",
     "state": "TN"
 }
+```
 
 #### response example: 
 
+```
 {
   "id": "9ae37a91-e040-4b96-b234-c5f55b224d78",
   "firstName": "Alice",
@@ -70,3 +75,4 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
   "city": "Madison",
   "state": "TN"
 }
+```
