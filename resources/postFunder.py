@@ -15,6 +15,7 @@ def handler(event, context):
         "sk": f"FUNDER#{id}#",
         "firstName": json_body["firstName"],
         "lastName": json_body["lastName"],
+        "avatar": json_body.get("avatar"),
         "bio": json_body["bio"],
         "investmentInterests": json_body["investmentInterests"],
         "availableSupport": json_body["availableSupport"],

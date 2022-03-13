@@ -50,6 +50,7 @@ export const addGetFundersApiIntegration: (
           "firstName": "$elem.firstName.S",
           "lastName": "$elem.lastName.S",
           "bio": "$elem.bio.S",
+          "avatar": "$elem.avatar.S",
           "investmentInterests": "$elem.investmentInterests.S",
           "availableSupport": "$elem.availableSupport.S",
           "city": "$elem.city.S",
