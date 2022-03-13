@@ -1,16 +1,52 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { aws_dynamodb as ddb } from 'aws-cdk-lib';
+import { aws_lambda as lambda } from 'aws-cdk-lib';
+import * as apigateway from "aws-cdk-lib/aws-apigateway";
+import { addGetLearnersApiIntegration } from './apig/getLearnersDynamoDirectProxy';
+import { addGetFundersApiIntegration } from './apig/getFundersDynamoDirectProxy';
+import { addPostLearnerApiIntegration } from './apig/postLearnerLambdaProxy';
 
 export class LearnerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    // dynamo
+    const table = new ddb.Table(this, 'Table', {
+      partitionKey: { name: 'pk', type: ddb.AttributeType.STRING },
+      sortKey: { name: 'sk', type: ddb.AttributeType.STRING },
+      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
+    });
+    table.addGlobalSecondaryIndex({
+      indexName: 'gsi1-sk-Index',
+      partitionKey: {name: 'gsi1', type: ddb.AttributeType.STRING},
+      sortKey: {name: 'sk', type: ddb.AttributeType.STRING},
+      projectionType: ddb.ProjectionType.ALL,
+    })
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'LearnerQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    //lambda
+    const postLearnerLambda = new lambda.Function(this, 'postLearner', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'postLearner.handler',
+      code: lambda.Code.fromAsset("resources"),
+    });
+
+    table.grantWriteData(postLearnerLambda);
+    
+    // apig
+
+    const api = new apigateway.RestApi(this, "learners-api", {
+      restApiName: "Learners Service",
+      description: "API Endpoint for Learners Service"
+    });
+
+    const v1Resource = api.root.addResource("api").addResource("v1");
+    const learnerResource = v1Resource.addResource("learner");
+    const funderResource = v1Resource.addResource("funder");
+
+    addGetLearnersApiIntegration(this, api, learnerResource, table);
+    addPostLearnerApiIntegration(this, api, learnerResource, postLearnerLambda, table);
+    addGetFundersApiIntegration(this, api, funderResource, table);
+
   }
 }
