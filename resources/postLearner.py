@@ -15,6 +15,7 @@ def handler(event, context):
         "sk": f"LEARNER#{id}#",
         "firstName": json_body["firstName"],
         "lastName": json_body["lastName"],
+        "avatar": json_body.get("avatar"),
         "bio": json_body["bio"],
         "tradeFocus": json_body["tradeFocus"],
         "investmentNeeds": json_body["investmentNeeds"],

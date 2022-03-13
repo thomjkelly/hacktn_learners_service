@@ -53,6 +53,7 @@ export const addGetLearnerApiIntegration: (
             "learnerId": "$skComponents.get(1)",
             "firstName": "$elem.firstName.S",
             "lastName": "$elem.lastName.S",
+            "avatar": "$elem.avatar.S",
             "bio": "$elem.bio.S",
             "tradeFocus": "$elem.tradeFocus.S",
             "investmentNeeds": "$elem.investmentNeeds.S",
