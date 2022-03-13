@@ -27,3 +27,14 @@ export const postFunderRequestSchema = {
         state: {type: JsonSchemaType.STRING}
     }
 }
+
+export const postPartnerRequestSchema = {
+    type: JsonSchemaType.OBJECT,
+    required: ['name', 'profile', 'city', 'state'],
+    properties: {
+        name: {type: JsonSchemaType.STRING},
+        profile: {type: JsonSchemaType.STRING},
+        city: {type: JsonSchemaType.STRING},
+        state: {type: JsonSchemaType.STRING}
+    }
+}

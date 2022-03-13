@@ -9,6 +9,9 @@ import { addPostLearnerApiIntegration } from './apig/postLearnerLambdaProxy';
 import { addGetLearnerApiIntegration } from './apig/getLearnerDynamoDirectProxy';
 import { addPostFunderApiIntegration } from './apig/postFunderLambdaProxy';
 import { addGetFunderApiIntegration } from './apig/getFunderDynamoDirectProxy';
+import { addGetPartnersApiIntegration } from './apig/getPartnersDynamoDirectProxy';
+import { addGetPartnerApiIntegration } from './apig/getPartnerDynamoDirectProxy';
+import { addPostPartnerApiIntegration } from './apig/postPartnerLambdaProxy';
 
 export class LearnerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -43,6 +46,14 @@ export class LearnerStack extends Stack {
     });
 
     table.grantWriteData(postFunderLambda);
+
+    const postPartnerLambda = new lambda.Function(this, 'postPartner', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'postPartner.handler',
+      code: lambda.Code.fromAsset("resources"),
+    });
+
+    table.grantWriteData(postPartnerLambda);
     
     // apig
     const api = new apigateway.RestApi(this, "learners-api", {
@@ -55,6 +66,8 @@ export class LearnerStack extends Stack {
     const learnerByIdResource = learnerResource.addResource("{id}");
     const funderResource = v1Resource.addResource("funder");
     const funderByIdResource = funderResource.addResource("{id}");
+    const partnerResource = v1Resource.addResource("partner");
+    const partnerByIdResource = partnerResource.addResource("{id}");
 
     addGetLearnersApiIntegration(this, api, learnerResource, table);
     addGetLearnerApiIntegration(this, api, learnerByIdResource, table);
@@ -62,5 +75,8 @@ export class LearnerStack extends Stack {
     addGetFundersApiIntegration(this, api, funderResource, table);
     addGetFunderApiIntegration(this, api, funderByIdResource, table);
     addPostFunderApiIntegration(this, api, funderResource, postFunderLambda, table);
+    addGetPartnersApiIntegration(this, api, partnerResource, table);
+    addGetPartnerApiIntegration(this, api, partnerByIdResource, table);
+    addPostPartnerApiIntegration(this, api, partnerResource, postPartnerLambda, table);
   }
 }

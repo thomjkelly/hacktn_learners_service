@@ -172,3 +172,67 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
   "state": "TN",
 }
 ```
+
+### GET /partner
+
+#### response example: 
+
+```
+{
+  "partners": [
+    {
+      "partnerId": "06c9812f-e75b-4f74-9d98-ae3582a0dda6",
+      "name": "Nashville Tech Bootcamp",
+      "profile": "We are the original tech bootcamp in Tennessee",
+      "city": "Nashville",
+      "state": "TN"
+    },
+    {
+      "partnerId": "cfbad09a-44ce-4398-af51-6c5f275e74c8",
+      "name": "Surfin' Plumbers",
+      "profile": "We are the only plumbers who regularly say 'Cowabunga'",
+      "city": "Nashville",
+      "state": "TN"
+    }
+  ]
+}
+```
+
+### GET /partner/{id}
+
+#### response example: 
+
+```
+{
+  "partnerId": "cfbad09a-44ce-4398-af51-6c5f275e74c8",
+  "name": "Surfin' Plumbers",
+  "profile": "We are the only plumbers who regularly say 'Cowabunga'",
+  "city": "Nashville",
+  "state": "TN"
+}
+```
+
+### POST /partner
+
+#### request example
+
+```
+{
+    "name": "Nashville Tech Bootcamp",
+    "profile": "We are the original tech bootcamp in Tennessee",
+    "city": "Nashville",
+    "state": "TN"
+}
+```
+
+#### response example: 
+
+```
+{
+  "id": "06c9812f-e75b-4f74-9d98-ae3582a0dda6",
+  "name": "Nashville Tech Bootcamp",
+  "profile": "We are the original tech bootcamp in Tennessee",
+  "city": "Nashville",
+  "state": "TN"
+}
+```
